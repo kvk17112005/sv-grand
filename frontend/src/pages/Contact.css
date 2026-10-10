@@ -1,0 +1,134 @@
+.contact-page {
+  background: #faf7f1;
+  color: #292723;
+  padding: 55px 6% 70px;
+  min-height: 65vh;
+}
+
+.contact-hero {
+  max-width: 760px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.contact-label {
+  color: #a87824;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 15px;
+}
+
+.contact-hero h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(38px, 5vw, 58px);
+  font-weight: 500;
+  margin: 0 0 18px;
+}
+
+.contact-hero > p:last-child {
+  color: #625e57;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.contact-cards {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.contact-card {
+  background: #fffdf9;
+  border: 1px solid #ead9bd;
+  border-radius: 16px;
+  padding: 32px 26px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(99, 72, 30, 0.06);
+}
+
+.contact-icon {
+  width: 68px;
+  height: 68px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #f5ead4;
+  color: #a87824;
+  font-size: 32px;
+}
+
+.contact-card h2,
+.contact-note h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 25px;
+  font-weight: 500;
+}
+
+.contact-card > p {
+  min-height: 54px;
+  color: #625e57;
+  line-height: 1.8;
+}
+
+.contact-card h3 {
+  color: #a87824;
+  font-size: 22px;
+  margin: 20px 0;
+}
+
+.contact-button {
+  display: inline-block;
+  padding: 13px 23px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #bd913b, #90651d);
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.contact-button:hover {
+  opacity: 0.85;
+}
+
+.whatsapp-button {
+  background: #218c54;
+}
+
+.contact-note {
+  max-width: 900px;
+  margin: 28px auto 0;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid #ead9bd;
+  border-radius: 14px;
+  background: #fffdf9;
+}
+
+.contact-note h2 {
+  margin-top: 0;
+}
+
+.contact-note p {
+  color: #625e57;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+@media (max-width: 650px) {
+  .contact-page {
+    padding: 38px 5%;
+  }
+
+  .contact-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    padding: 26px 20px;
+  }
+}

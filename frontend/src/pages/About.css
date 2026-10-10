@@ -1,0 +1,208 @@
+.about-page {
+  --about-gold: #a87824;
+  --about-border: #ead9bd;
+  --about-text: #292723;
+  background: #faf7f1;
+  color: var(--about-text);
+  padding: 55px 6% 70px;
+}
+
+.about-hero {
+  max-width: 900px;
+  margin: 0 auto 42px;
+  text-align: center;
+}
+
+.about-eyebrow {
+  color: var(--about-gold);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+}
+
+.about-hero h1 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(36px, 5vw, 60px);
+  font-weight: 500;
+  line-height: 1.12;
+  margin: 0 auto 20px;
+}
+
+.about-divider {
+  width: 54px;
+  height: 2px;
+  background: #d7b36f;
+  margin: 20px auto;
+}
+
+.about-intro {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.9;
+  color: #5d5952;
+}
+
+.about-cards {
+  max-width: 1180px;
+  margin: 0 auto 26px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.about-card {
+  background: #fffdf9;
+  border: 1px solid var(--about-border);
+  border-radius: 15px;
+  padding: 30px 24px;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(99, 72, 30, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(99, 72, 30, 0.1);
+}
+
+.about-card-icon,
+.about-location-icon {
+  width: 66px;
+  height: 66px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f5ead4;
+  font-size: 27px;
+}
+
+.about-card h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  margin: 0 0 14px;
+}
+
+.about-price {
+  color: var(--about-gold);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 29px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.about-price span {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.about-card .about-divider {
+  margin: 18px auto;
+}
+
+.about-card > p:last-child {
+  color: #625e57;
+  font-size: 14px;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+.about-card .about-small {
+  color: #625e57;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 8px 0 0;
+}
+
+.about-location {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #fffdf9;
+  border: 1px solid var(--about-border);
+  border-radius: 15px;
+}
+
+.about-location-icon {
+  flex-shrink: 0;
+  margin: 0;
+  color: var(--about-gold);
+  font-size: 36px;
+}
+
+.about-location-content {
+  flex: 1;
+}
+
+.about-location-content .about-eyebrow {
+  margin-bottom: 8px;
+}
+
+.about-location-content h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 30px;
+  font-weight: 500;
+  margin: 0 0 10px;
+}
+
+.about-location-content > p:not(.about-eyebrow) {
+  color: #625e57;
+  line-height: 1.8;
+  margin: 0 0 18px;
+}
+
+.about-location-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 22px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #bd913b, #90651d);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.about-location-button:hover {
+  opacity: 0.88;
+}
+
+@media (max-width: 800px) {
+  .about-page {
+    padding: 40px 5%;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .about-location {
+    align-items: flex-start;
+    padding: 22px;
+  }
+
+  .about-location-content h2 {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-location {
+    flex-direction: column;
+  }
+
+  .about-hero h1 {
+    font-size: 36px;
+  }
+
+  .about-intro {
+    font-size: 14px;
+  }
+}
