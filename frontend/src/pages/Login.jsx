@@ -1,27 +1,37 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getDashboardPath } from "../context/authRoles";
+import { useAuth } from "../context/useAuth";
 
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { signIn, serviceError } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSubmitting(true);
 
-    if (!email || !password) {
-      alert("Please enter your email and password.");
-      return;
+    try {
+      const user = await signIn({ email, password });
+      const isStaff = user.role === "admin" || user.role === "super_admin";
+      navigate(
+        isStaff
+          ? getDashboardPath(user.role)
+          : location.state?.redirectTo || "/account",
+        { replace: true }
+      );
+    } catch (submitError) {
+      setError(submitError.message);
+    } finally {
+      setSubmitting(false);
     }
-
-    // Temporary login
-    // Customer authentication will be connected later.
-    localStorage.setItem("svGrandLoggedIn", "true");
-    localStorage.setItem("svGrandCustomerEmail", email);
-
-    navigate(location.state?.redirectTo || "/rooms");
   };
 
   return (
@@ -39,7 +49,9 @@ function Login() {
 
             <p>
               Sign in to manage your bookings and
-              continue your stay with us.
+              continue your stay with us. Accounts created
+              before shared sign-in was enabled need to be
+              registered again here.
             </p>
           </div>
 
@@ -53,6 +65,8 @@ function Login() {
 
               <input
                 type="email"
+                required
+                autoComplete="email"
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -64,34 +78,24 @@ function Login() {
 
               <input
                 type="password"
+                required
+                autoComplete="current-password"
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            <div className="login-options">
-              <label>
-                <input type="checkbox" />
-                <span>Remember me</span>
-              </label>
-
-              <button
-                type="button"
-                className="forgot-password"
-                onClick={() =>
-                  alert("Password reset will be available soon.")
-                }
-              >
-                Forgot Password?
-              </button>
-            </div>
+            {(error || serviceError) && (
+              <p className="form-error" role="alert">{error || serviceError}</p>
+            )}
 
             <button
               type="submit"
               className="login-submit-btn"
+              disabled={submitting}
             >
-              SIGN IN →
+              {submitting ? "SIGNING IN…" : "SIGN IN →"}
             </button>
 
           </form>

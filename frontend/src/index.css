@@ -2068,6 +2068,409 @@ img {
     text-align: center;
   }
 }
+
+/* CUSTOMER ACCOUNT */
+.account-page,
+.admin-page {
+  min-height: 72vh;
+  padding: 54px 6% 70px;
+  background: #f8f6f2;
+  color: #242424;
+}
+
+.account-heading,
+.admin-heading {
+  max-width: 1120px;
+  margin: 0 auto 32px;
+}
+
+.account-heading h1,
+.admin-heading h1 {
+  margin: 8px 0;
+  font: 500 clamp(32px, 4vw, 44px) Georgia, "Times New Roman", serif;
+}
+
+.account-heading > p:last-child,
+.admin-heading > div > p:last-child {
+  color: #777;
+  margin: 0;
+}
+
+.account-layout {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.6fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.account-card,
+.admin-panel {
+  background: #fff;
+  border: 1px solid #e8e2d8;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(48, 39, 25, 0.035);
+}
+
+.account-profile,
+.account-history {
+  padding: 26px;
+}
+
+.account-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee8df;
+}
+
+.account-avatar {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #a67c32;
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.account-card-heading .section-label,
+.account-section-heading .section-label,
+.admin-panel .section-label {
+  margin: 0 0 6px;
+  color: #a67c32;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.account-card-heading h2,
+.account-section-heading h2,
+.admin-panel-heading h2 {
+  margin: 0;
+  font: 500 22px Georgia, "Times New Roman", serif;
+}
+
+.account-form {
+  display: grid;
+  gap: 16px;
+  padding-top: 20px;
+}
+
+.account-form .login-field span {
+  font-size: 11px;
+  font-weight: 700;
+  color: #5f5a52;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.account-form .login-field input {
+  height: 44px;
+  border-radius: 5px;
+}
+
+.account-form .login-field input:read-only {
+  background: #f8f6f2;
+  color: #777;
+}
+
+.account-save {
+  justify-content: center;
+  min-height: 44px;
+  border: 0;
+  cursor: pointer;
+}
+
+.account-section-heading,
+.admin-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.account-section-heading > a {
+  color: #a67c32;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.account-section-heading > a:hover {
+  text-decoration: underline;
+}
+
+.account-history-list {
+  display: grid;
+}
+
+.account-history-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 17px 0;
+  border-top: 1px solid #eee8df;
+}
+
+.account-history-item > div {
+  display: grid;
+  gap: 6px;
+}
+
+.account-history-item strong {
+  font-size: 14px;
+}
+
+.account-history-item span {
+  color: #777;
+  font-size: 12px;
+}
+
+.account-history-meta {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.account-history-meta span {
+  color: #a67c32;
+}
+
+.account-empty {
+  padding: 28px 0 10px;
+  border-top: 1px solid #eee8df;
+  color: #777;
+  text-align: center;
+  font-size: 14px;
+}
+
+.account-empty .gold-button {
+  display: inline-flex;
+  margin-top: 8px;
+}
+
+.account-logout-row {
+  max-width: 1120px;
+  margin: 22px auto 0;
+  padding: 18px 20px;
+  border: 1px solid #e8e2d8;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: #777;
+  font-size: 13px;
+}
+
+.account-logout,
+.user-dropdown-item.logout-item {
+  color: #a33a32;
+}
+
+.account-logout {
+  border: 1px solid #ecd9d6;
+  border-radius: 5px;
+  background: #fff;
+  padding: 9px 15px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.account-logout:hover {
+  background: #faf0ef;
+}
+
+.account-message,
+.admin-loading {
+  min-height: 55vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #777;
+}
+
+.form-error,
+.account-inline-error,
+.admin-error,
+.navbar-error {
+  margin: 0;
+  color: #a33a32;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.form-success {
+  margin: 0;
+  color: #176b43;
+  font-size: 13px;
+}
+
+.navbar-error {
+  padding: 0 20px 14px;
+}
+
+/* ROLE-BASED MANAGEMENT DASHBOARD */
+.admin-page {
+  max-width: none;
+}
+
+.admin-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.admin-role-badge {
+  padding: 9px 13px;
+  border: 1px solid #e4d4b7;
+  border-radius: 30px;
+  background: #fffaf0;
+  color: #856126;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+
+.admin-stats,
+.admin-panel,
+.admin-error,
+.admin-loading {
+  max-width: 1120px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.admin-stats article {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #e8e2d8;
+  border-radius: 10px;
+  background: #fff;
+  display: grid;
+  gap: 12px;
+}
+
+.admin-stats span {
+  color: #777;
+  font-size: 12px;
+}
+
+.admin-stats strong {
+  font: 500 clamp(21px, 3vw, 28px) Georgia, "Times New Roman", serif;
+  overflow-wrap: anywhere;
+}
+
+.admin-panel {
+  margin-bottom: 20px;
+  padding: 22px;
+}
+
+.admin-panel-heading > p {
+  margin: 0;
+  color: #777;
+  font-size: 12px;
+}
+
+.admin-table-wrap {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 13px 12px;
+  border-top: 1px solid #eee8df;
+  white-space: nowrap;
+}
+
+.admin-table th {
+  color: #777;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.admin-table td span:not(.admin-status) {
+  display: block;
+  margin-top: 5px;
+  color: #888;
+  font-size: 11px;
+}
+
+.admin-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #f7f3eb;
+  color: #856126;
+  font-size: 10px;
+}
+
+.admin-empty {
+  color: #777;
+  text-align: center;
+  padding: 25px !important;
+}
+
+.admin-error {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border: 1px solid #ecd9d6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+@media (max-width: 760px) {
+  .account-page,
+  .admin-page {
+    padding: 36px 18px 50px;
+  }
+
+  .account-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .admin-stats article {
+    padding: 15px;
+  }
+
+  .admin-panel {
+    padding: 17px;
+  }
+
+  .account-logout-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 /* =================================
    PROFESSIONAL BOOKING FORM
 ================================= */
@@ -6287,6 +6690,16 @@ body.dark-mode .user-dropdown-item:hover {
 }
 
 .status-expired {
+  color: #a12e2e;
+  background: #fde7e7;
+}
+
+.status-pending-approval {
+  color: #805d14;
+  background: #fff1c9;
+}
+
+.status-cancelled {
   color: #a12e2e;
   background: #fde7e7;
 }

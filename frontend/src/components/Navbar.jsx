@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Link,
-  useLocation,
   useNavigate,
 } from "react-router-dom";
 
@@ -10,44 +9,25 @@ import {
   FaChevronDown,
   FaMoon,
   FaSun,
-  FaBell,
-  FaCog,
   FaSuitcase,
   FaUserCircle,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { getDashboardPath } from "../context/authRoles";
+import { useAuth } from "../context/useAuth";
 
 function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { user, status, signOut } = useAuth();
   const menuRef = useRef(null);
-
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    localStorage.getItem("svGrandLoggedIn") === "true"
-  );
-
   const [menuOpen, setMenuOpen] = useState(false);
+  const [logoutError, setLogoutError] = useState("");
 
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("svGrandDarkMode") === "true"
   );
 
-  const userName =
-    localStorage.getItem("svGrandCustomerName") || "Guest";
-
-  const userEmail =
-    localStorage.getItem("svGrandCustomerEmail") || "";
-
-  /*
-    Sync login status whenever the route changes.
-    This makes BOOK NOW change to the user icon immediately
-    after login.
-  */
-  useEffect(() => {
-    setIsLoggedIn(
-      localStorage.getItem("svGrandLoggedIn") === "true"
-    );
-  }, [location]);
+  const isStaff = user?.role === "admin" || user?.role === "super_admin";
 
   /*
     Dark / Light mode
@@ -91,13 +71,15 @@ function Navbar() {
   /*
     Logout
   */
-  const handleLogout = () => {
-    localStorage.removeItem("svGrandLoggedIn");
-
-    setIsLoggedIn(false);
-    setMenuOpen(false);
-
-    navigate("/");
+  const handleLogout = async () => {
+    setLogoutError("");
+    try {
+      await signOut();
+      setMenuOpen(false);
+      navigate("/", { replace: true });
+    } catch (error) {
+      setLogoutError(error.message);
+    }
   };
 
   /*
@@ -151,7 +133,7 @@ function Navbar() {
 
 
         {/* NOT LOGGED IN → BOOK NOW */}
-        {!isLoggedIn && (
+        {status === "ready" && !user && (
           <Link
             to="/login"
             className="nav-book-btn"
@@ -163,7 +145,7 @@ function Navbar() {
 
 
         {/* LOGGED IN → USER ICON */}
-        {isLoggedIn && (
+        {status === "ready" && user && (
           <div
             className="navbar-user"
             ref={menuRef}
@@ -202,11 +184,11 @@ function Navbar() {
 
                   <div className="user-info">
                     <strong>
-                      {userName}
+                      {user.name || user.fullName || user.email}
                     </strong>
 
                     <span>
-                      {userEmail}
+                      {user.email}
                     </span>
                   </div>
 
@@ -222,12 +204,12 @@ function Navbar() {
                   className="user-dropdown-item"
                   onClick={() => {
                     setMenuOpen(false);
-                    navigate("/account");
+                    navigate(getDashboardPath(user.role));
                   }}
                 >
                   <FaUserCircle />
                   <span>
-                    My Account
+                    {isStaff ? "Management Dashboard" : "My Account"}
                   </span>
                 </button>
 
@@ -244,42 +226,6 @@ function Navbar() {
                   <FaSuitcase />
                   <span>
                     My Bookings
-                  </span>
-                </button>
-
-
-                {/* NOTIFICATIONS */}
-                <button
-                  type="button"
-                  className="user-dropdown-item"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    alert(
-                      "Notifications will be available soon."
-                    );
-                  }}
-                >
-                  <FaBell />
-                  <span>
-                    Notifications
-                  </span>
-                </button>
-
-
-                {/* SETTINGS */}
-                <button
-                  type="button"
-                  className="user-dropdown-item"
-                  onClick={() => {
-                    setMenuOpen(false);
-                    alert(
-                      "Account settings will be available soon."
-                    );
-                  }}
-                >
-                  <FaCog />
-                  <span>
-                    Settings
                   </span>
                 </button>
 
@@ -302,6 +248,9 @@ function Navbar() {
                       : "Dark Mode"}
                   </span>
                 </button>
+                {logoutError && (
+                  <p className="navbar-error" role="alert">{logoutError}</p>
+                )}
 
 
                 <div className="user-dropdown-divider"></div>

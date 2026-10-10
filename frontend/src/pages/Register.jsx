@@ -1,36 +1,39 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getDashboardPath } from "../context/authRoles";
+import { useAuth } from "../context/useAuth";
 
 function Register() {
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !phone || !password || !confirmPassword) {
-      alert("Please fill in all the details.");
-      return;
-    }
-
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      setError("Passwords do not match.");
       return;
     }
 
-    localStorage.setItem("svGrandCustomerName", name);
-    localStorage.setItem("svGrandCustomerEmail", email);
-    localStorage.setItem("svGrandCustomerPhone", phone);
-    localStorage.setItem("svGrandCustomerPassword", password);
+    setError("");
+    setSubmitting(true);
 
-    alert("Account created successfully!");
-
-    navigate("/login");
+    try {
+      const user = await register({ name, email, phone, password });
+      navigate(getDashboardPath(user.role), { replace: true });
+    } catch (submitError) {
+      setError(submitError.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -61,6 +64,8 @@ function Register() {
 
               <input
                 type="text"
+                required
+                autoComplete="name"
                 placeholder="Enter your full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -72,6 +77,8 @@ function Register() {
 
               <input
                 type="email"
+                required
+                autoComplete="email"
                 placeholder="Enter your email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -83,6 +90,8 @@ function Register() {
 
               <input
                 type="tel"
+                required
+                autoComplete="tel"
                 placeholder="Enter your phone number"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
@@ -94,6 +103,8 @@ function Register() {
 
               <input
                 type="password"
+                required
+                autoComplete="new-password"
                 placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -105,6 +116,8 @@ function Register() {
 
               <input
                 type="password"
+                required
+                autoComplete="new-password"
                 placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) =>
@@ -113,11 +126,14 @@ function Register() {
               />
             </div>
 
+            {error && <p className="form-error" role="alert">{error}</p>}
+
             <button
               type="submit"
               className="login-submit-btn"
+              disabled={submitting}
             >
-              CREATE ACCOUNT →
+              {submitting ? "CREATING ACCOUNT…" : "CREATE ACCOUNT →"}
             </button>
 
           </form>

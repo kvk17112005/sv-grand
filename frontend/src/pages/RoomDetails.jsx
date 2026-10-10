@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
 import acRoom1 from "../assets/hotel/ac-room-1.jpg";
 import premiumAcRoom from "../assets/hotel/premium-ac-room.jpg";
@@ -8,6 +9,7 @@ import nonAcRoom2 from "../assets/hotel/non-ac-room-2.jpg";
 function RoomDetails() {
   const { type } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const rooms = {
     "ac-deluxe": {
@@ -165,10 +167,7 @@ function RoomDetails() {
               type="button"
               className="reserve-btn"
               onClick={() => {
-              const isLoggedIn =
-             localStorage.getItem("svGrandLoggedIn") === "true";
-
-              if (isLoggedIn) {
+              if (user) {
                navigate(`/terms/${type}`);
               } else {
                 navigate("/login", {

@@ -1,16 +1,21 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { getDashboardPath } from "../context/authRoles";
+import { useAuth } from "../context/useAuth";
 
 function Home() {
-  const [showLandingVideo, setShowLandingVideo] = useState(true);
+  const { user, status } = useAuth();
+  const [showLandingVideo, setShowLandingVideo] = useState(
+    () => sessionStorage.getItem("svGrandLandingShown") !== "true"
+  );
 
-  useEffect(() => {
-    const alreadyShown = sessionStorage.getItem("svGrandLandingShown");
+  if (status === "loading") {
+    return <main className="account-message">Checking your account…</main>;
+  }
 
-    if (alreadyShown) {
-      setShowLandingVideo(false);
-    }
-  }, []);
+  if (user) {
+    return <Navigate to={getDashboardPath(user.role)} replace />;
+  }
 
   const handleVideoEnd = () => {
     sessionStorage.setItem("svGrandLandingShown", "true");

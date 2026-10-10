@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { apiRequest } from "../services/api";
 
 function getLocalDate() {
   const date = new Date();
@@ -11,6 +12,9 @@ function getLocalDate() {
 }
 
 function getBookingStatus(booking) {
+  if (booking.status === "pending") return "Pending Approval";
+  if (booking.status === "cancelled") return "Cancelled";
+
   const today = getLocalDate();
 
   if (booking.checkOut < today) {
@@ -25,36 +29,30 @@ function getBookingStatus(booking) {
 }
 
 function MyBookings() {
-  const navigate = useNavigate();
-
   const [bookings, setBookings] = useState([]);
-
-  const email = (
-    localStorage.getItem("svGrandCustomerEmail") || ""
-  ).trim().toLowerCase();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const loggedIn =
-      localStorage.getItem("svGrandLoggedIn") === "true";
-
-    if (!loggedIn || !email) {
-      navigate("/login", {
-        state: { redirectTo: "/my-bookings" },
-        replace: true,
+    let active = true;
+    apiRequest("/api/bookings?scope=mine")
+      .then((payload) => {
+        if (!Array.isArray(payload?.bookings)) {
+          throw new Error("The account service returned an invalid bookings response.");
+        }
+        if (active) setBookings(payload.bookings);
+      })
+      .catch((requestError) => {
+        if (active) setError(requestError.message);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
       });
-      return;
-    }
 
-    try {
-      const saved = JSON.parse(
-        localStorage.getItem(`svGrandBookings_${email}`) || "[]"
-      );
-
-      setBookings(Array.isArray(saved) ? saved : []);
-    } catch {
-      setBookings([]);
-    }
-  }, [email, navigate]);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const formatDate = (date) => {
     if (!date) return "—";
@@ -106,7 +104,14 @@ function MyBookings() {
           </div>
         </div>
 
-        {bookings.length === 0 ? (
+        {error ? (
+          <div className="no-bookings">
+            <h2>Could not load your bookings</h2>
+            <p role="alert">{error}</p>
+          </div>
+        ) : loading ? (
+          <div className="no-bookings"><p>Loading your bookings…</p></div>
+        ) : bookings.length === 0 ? (
           <div className="no-bookings">
             <h2>No bookings yet</h2>
             <p>Your room reservations will appear here after booking.</p>
@@ -131,7 +136,7 @@ function MyBookings() {
                     </div>
 
                     <span
-                      className={`booking-status status-${status.toLowerCase()}`}
+                      className={`booking-status status-${status.toLowerCase().replaceAll(" ", "-")}`}
                     >
                       {status}
                     </span>

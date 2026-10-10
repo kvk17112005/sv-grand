@@ -4,10 +4,13 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
+import { apiRequest } from "../services/api";
 
 function Booking() {
   const { type } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -51,9 +54,9 @@ function Booking() {
   // FORM DATA
   // =========================
 
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(user.name || user.fullName || "");
+  const [phone, setPhone] = useState(user.phone || "");
+  const [email, setEmail] = useState(user.email || "");
   const [aadhaar, setAadhaar] = useState("");
 
   const [checkIn, setCheckIn] = useState("");
@@ -67,6 +70,8 @@ function Booking() {
 
   const [childrenBelow13, setChildrenBelow13] =
     useState(0);
+  const [submitError, setSubmitError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
 
   // =========================
@@ -182,8 +187,9 @@ function Booking() {
   // SUBMIT BOOKING
   // =========================
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError("");
 
 
     // =========================
@@ -300,68 +306,24 @@ function Booking() {
     // =========================
 
 
-    // SAVE BOOKING FOR THE LOGGED-IN CUSTOMER
-
-    const customerEmail = (
-      localStorage.getItem("svGrandCustomerEmail") || email
-    ).trim().toLowerCase();
-
-    if (
-      localStorage.getItem("svGrandLoggedIn") !== "true" ||
-      !customerEmail
-    ) {
-      alert("Please log in before booking.");
-
-      navigate("/login", {
-        state: {
-          redirectTo: `/booking/${type}`,
-        },
-      });
-
-      return;
-    }
-
-    // Do not store Aadhaar number in browser booking history.
-    const savedBooking = {
-      ...bookingData,
-      email: customerEmail,
-    };
-
-    delete savedBooking.aadhaar;
-
-    const storageKey = `svGrandBookings_${customerEmail}`;
-
-    let existingBookings = [];
+    const safeBooking = { ...bookingData };
+    delete safeBooking.aadhaar;
+    setSubmitting(true);
 
     try {
-      existingBookings = JSON.parse(
-        localStorage.getItem(storageKey) || "[]"
-      );
-
-      if (!Array.isArray(existingBookings)) {
-        existingBookings = [];
+      const result = await apiRequest("/api/bookings", {
+        method: "POST",
+        body: JSON.stringify({ ...safeBooking, email: user.email }),
+      });
+      if (!result?.booking) {
+        throw new Error("The account service returned an invalid booking response.");
       }
-    } catch {
-      existingBookings = [];
+      navigate("/booking-confirmation", { state: result.booking });
+    } catch (requestError) {
+      setSubmitError(requestError.message);
+    } finally {
+      setSubmitting(false);
     }
-
-    // Prevent duplicate entries for the same Booking ID.
-    const updatedBookings = [
-      savedBooking,
-      ...existingBookings.filter(
-        (item) => item.bookingId !== savedBooking.bookingId
-      ),
-    ];
-
-    localStorage.setItem(
-      storageKey,
-      JSON.stringify(updatedBookings)
-    );
-
-    // Open confirmation page.
-    navigate("/booking-confirmation", {
-      state: bookingData,
-    });
 
   };
 
@@ -409,6 +371,9 @@ function Booking() {
           className="booking-form"
           onSubmit={handleSubmit}
         >
+          {submitError && (
+            <p className="form-error" role="alert">{submitError}</p>
+          )}
 
           {/* =========================
               GUEST DETAILS
@@ -829,9 +794,10 @@ function Booking() {
           <button
             type="submit"
             className="confirm-booking-btn"
+            disabled={submitting}
           >
 
-            REQUEST BOOKING
+            {submitting ? "SENDING REQUEST…" : "REQUEST BOOKING"}
 
             <span>
               →
